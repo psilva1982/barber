@@ -1,13 +1,21 @@
+import { BarberShopItem } from "@/components/barbershop-item"
 import { Header } from "@/components/header"
 import { Avatar, AvatarImage } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
+import { db } from "@/lib/prisma"
 import { SearchIcon } from "lucide-react"
 import Image from "next/image"
 
-export default function Home() {
+export default async function Home() {
+  const barbershops = await db.barbershop.findMany({})
+  const popularBarbershops = await db.barbershop.findMany({
+    orderBy: {
+      name: "desc",
+    },
+  })
   return (
     <div>
       <Header />
@@ -54,6 +62,25 @@ export default function Home() {
             </div>
           </CardContent>
         </Card>
+
+        <h2 className="mt-6 mb-2 text-xs font-semibold text-gray-400 uppercase">
+          Recomendados
+        </h2>
+        <div className="flex gap-2 overflow-auto [&::-webkit-scrollbar]:hidden">
+          {barbershops.map((barbershop) => (
+            <BarberShopItem key={barbershop.id} barbershop={barbershop} />
+          ))}
+        </div>
+
+        <h2 className="mt-6 mb-2 text-xs font-semibold text-gray-400 uppercase">
+          Populares
+        </h2>
+        <div className="flex gap-2 overflow-auto [&::-webkit-scrollbar]:hidden">
+          {popularBarbershops.map((barbershop) => (
+            <BarberShopItem key={barbershop.id} barbershop={barbershop} />
+          ))}
+        </div>
+
       </div>
     </div>
   )
