@@ -30,6 +30,38 @@ export default async function Home() {
           </Button>
         </div>
 
+        <div className="mt-2 flex gap-2 overflow-x-scroll [&::-webkit-scrollbar]:hidden">
+          <Button variant={"secondary"} size={"sm"}>
+            <Image src="/cabelo.svg" width={16} height={16} alt="" />
+            Cabelo
+          </Button>
+
+          <Button variant={"secondary"} size={"sm"}>
+            <Image src="/barba.svg" width={16} height={16} alt="" />
+            Barba
+          </Button>
+
+          <Button variant={"secondary"} size={"sm"}>
+            <Image src="/cabelo.svg" width={16} height={16} alt="" />
+            Pezinho
+          </Button>
+
+          <Button variant={"secondary"} size={"sm"}>
+            <Image src="/acabamento.svg" width={16} height={16} alt="" />
+            Acabamento
+          </Button>
+
+          <Button variant={"secondary"} size={"sm"}>
+            <Image src="/barba.svg" width={16} height={16} alt="" />
+            Sobrancelha
+          </Button>
+
+          <Button variant={"secondary"} size={"sm"}>
+            <Image src="/acabamento.svg" width={16} height={16} alt="" />
+            Acabamento
+          </Button>
+        </div>
+
         <div className="relative mt-6 h-[150px] w-full">
           <Image
             src="/banner-01.png"
@@ -80,8 +112,17 @@ export default async function Home() {
             <BarberShopItem key={barbershop.id} barbershop={barbershop} />
           ))}
         </div>
-
       </div>
+
+      <footer>
+        <Card className="rounded-none p-5">
+          <CardContent>
+            <p className="text-sm text-gray-500">
+              2025 Copyright - <span className="font-semibold">Barber</span>
+            </p>
+          </CardContent>
+        </Card>
+      </footer>
     </div>
   )
 }
