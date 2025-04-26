@@ -1,13 +1,14 @@
 import { BarberShopItem } from "@/components/barbershop-item"
+import { BookingItem } from "@/components/booking-item"
 import { Header } from "@/components/header"
-import { Avatar, AvatarImage } from "@/components/ui/avatar"
-import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
+import { quickSearchOptions } from "@/contants/search"
 import { db } from "@/lib/prisma"
 import { SearchIcon } from "lucide-react"
 import Image from "next/image"
+import Link from "next/link"
 
 export default async function Home() {
   const barbershops = await db.barbershop.findMany({})
@@ -31,35 +32,24 @@ export default async function Home() {
         </div>
 
         <div className="mt-2 flex gap-2 overflow-x-scroll [&::-webkit-scrollbar]:hidden">
-          <Button variant={"secondary"} size={"sm"}>
-            <Image src="/cabelo.svg" width={16} height={16} alt="" />
-            Cabelo
-          </Button>
-
-          <Button variant={"secondary"} size={"sm"}>
-            <Image src="/barba.svg" width={16} height={16} alt="" />
-            Barba
-          </Button>
-
-          <Button variant={"secondary"} size={"sm"}>
-            <Image src="/cabelo.svg" width={16} height={16} alt="" />
-            Pezinho
-          </Button>
-
-          <Button variant={"secondary"} size={"sm"}>
-            <Image src="/acabamento.svg" width={16} height={16} alt="" />
-            Acabamento
-          </Button>
-
-          <Button variant={"secondary"} size={"sm"}>
-            <Image src="/barba.svg" width={16} height={16} alt="" />
-            Sobrancelha
-          </Button>
-
-          <Button variant={"secondary"} size={"sm"}>
-            <Image src="/acabamento.svg" width={16} height={16} alt="" />
-            Acabamento
-          </Button>
+          {quickSearchOptions.map((option) => (
+            <Button
+              className="gap-2"
+              variant="secondary"
+              key={option.title}
+              asChild
+            >
+              <Link href={`/barbershops?service=${option.title}`}>
+                <Image
+                  src={option.imageUrl}
+                  width={16}
+                  height={16}
+                  alt={option.title}
+                />
+                {option.title}
+              </Link>
+            </Button>
+          ))}
         </div>
 
         <div className="relative mt-6 h-[150px] w-full">
@@ -71,29 +61,7 @@ export default async function Home() {
           />
         </div>
 
-        <h2 className="mt-6 mb-2 text-xs font-semibold text-gray-400 uppercase">
-          Agendamentos
-        </h2>
-
-        <Card className="py-0">
-          <CardContent className="flex justify-between p-0">
-            <div className="flex flex-col gap-2 py-5 pl-5">
-              <Badge className="w-fit rounded-full">Confirmado</Badge>
-              <p className="font-medium">Corte de cabelo</p>
-              <div className="flex items-center gap-2">
-                <Avatar className="h-6 w-6">
-                  <AvatarImage src="https://utfs.io/f/c97a2dc9-cf62-468b-a851-bfd2bdde775f-16p.png" />
-                </Avatar>
-                <p className="text-sm font-semibold">Barbearia</p>
-              </div>
-            </div>
-            <div className="flex flex-col items-center justify-center border-l-2 border-solid px-7">
-              <p className="text-sm font-semibold">Maio</p>
-              <p className="text-2xl font-semibold">05</p>
-              <p className="text-sm font-semibold">20:00</p>
-            </div>
-          </CardContent>
-        </Card>
+        <BookingItem />
 
         <h2 className="mt-6 mb-2 text-xs font-semibold text-gray-400 uppercase">
           Recomendados
