@@ -2,7 +2,7 @@ import BarbershopContact from "@/components/barbershop-contact"
 import { ServiceItem } from "@/components/service-item"
 import { Button } from "@/components/ui/button"
 import { db } from "@/lib/prisma"
-import { ChevronLeftIcon, MapIcon, MenuIcon, Phone, PhoneIcon, SmartphoneIcon, StarIcon } from "lucide-react"
+import { ChevronLeftIcon, MapIcon, MenuIcon, StarIcon } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 import { notFound } from "next/navigation"
@@ -89,6 +89,7 @@ const BarbershopPage = async ({ params }: Props) => {
           <BarbershopContact key={index} phone={phone} />
         ))}
       </div>
+
     </div>
   )
 }

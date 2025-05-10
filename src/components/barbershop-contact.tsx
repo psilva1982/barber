@@ -12,7 +12,8 @@ const BarbershopContact = ({ phone }: Props) => {
   const handleCopyToClipboard = (phone: string) => {
     navigator.clipboard.writeText(phone)
     toast(phone, {
-        description: 'Copiado para área de trabalho'
+        description: 'Copiado para área de trabalho',
+        
     })
   }
 

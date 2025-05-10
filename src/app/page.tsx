@@ -2,7 +2,6 @@ import { BarberShopItem } from "@/components/barbershop-item"
 import { BookingItem } from "@/components/booking-item"
 import { Header } from "@/components/header"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { quickSearchOptions } from "@/contants/search"
 import { db } from "@/lib/prisma"
@@ -81,16 +80,6 @@ export default async function Home() {
           ))}
         </div>
       </div>
-
-      <footer>
-        <Card className="rounded-none p-5">
-          <CardContent>
-            <p className="text-sm text-gray-500">
-              2025 Copyright - <span className="font-semibold">Barber</span>
-            </p>
-          </CardContent>
-        </Card>
-      </footer>
     </div>
   )
 }
