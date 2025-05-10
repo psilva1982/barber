@@ -6,6 +6,8 @@ import { ChevronLeftIcon, MapIcon, MenuIcon, StarIcon } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 import { notFound } from "next/navigation"
+import SidebarSheet from "@/components/sidebar-sheet"
+import { Sheet, SheetTrigger } from "@/components/ui/sheet"
 
 type Props = {
   params: Promise<{ id: string }>
@@ -46,13 +48,14 @@ const BarbershopPage = async ({ params }: Props) => {
           </Link>
         </Button>
 
-        <Button
-          size="icon"
-          variant="secondary"
-          className="absolute top-4 right-4"
-        >
-          <MenuIcon />
-        </Button>
+        <Sheet>
+          <SheetTrigger asChild>
+            <Button size="icon" variant="secondary" className="absolute top-4 right-4">
+              <MenuIcon />
+            </Button>
+          </SheetTrigger>
+          <SidebarSheet />
+        </Sheet>
       </div>
       <div className="border-b border-solid p-5">
         <h1 className="text-xl font-bold">{barbershop?.name}</h1>
