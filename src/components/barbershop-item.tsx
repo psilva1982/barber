@@ -4,6 +4,7 @@ import { Card, CardContent } from "./ui/card"
 import { Button } from "./ui/button"
 import { Badge } from "./ui/badge"
 import { StarIcon } from "lucide-react"
+import Link from "next/link"
 
 type Props = {
   barbershop: Barbershop
@@ -32,8 +33,10 @@ const BarberShopItem = async ({ barbershop }: Props) => {
         <div className="px-1 py-2">
           <p className="truncate font-semibold">{barbershop.name}</p>
           <p className="truncate text-sm text-gray-400">{barbershop.address}</p>
-          <Button variant={"secondary"} className="mt-3 w-full">
-            Reservar
+          <Button variant={"secondary"} className="mt-3 w-full" asChild>
+            <Link href={`/barbershops/${barbershop.id}`}>
+              Reservar
+            </Link>
           </Button>
         </div>
       </CardContent>
