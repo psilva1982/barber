@@ -3,6 +3,7 @@ import { db } from "@/lib/prisma"
 import { ChevronLeftIcon, MapIcon, MenuIcon, StarIcon } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
+import { notFound } from "next/navigation"
 
 type Props = {
     params: Promise<{ id: string }>
@@ -15,6 +16,11 @@ const BarbershopPage = async ({ params }: Props) => {
             id
         }
     })
+
+    if (!barbershop) {
+        return notFound()
+    }
+
     return (
         <div>
             <div className="relative w-full h-[250px]">
