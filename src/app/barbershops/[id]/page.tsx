@@ -1,7 +1,7 @@
 import BarbershopContact from "@/components/barbershop-contact"
 import { ServiceItem } from "@/components/service-item"
 import { Button } from "@/components/ui/button"
-import { db } from "@/lib/prisma"
+import { db } from "@/_lib/prisma"
 import { ChevronLeftIcon, MapIcon, MenuIcon, StarIcon } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
