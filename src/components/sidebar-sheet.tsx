@@ -6,21 +6,14 @@ import { Button } from "./ui/button"
 import { SheetClose, SheetContent, SheetHeader, SheetTitle } from "./ui/sheet"
 import Image from "next/image"
 import Link from "next/link"
-import {
-  Dialog,
-  DialogContent,
-  DialogTrigger,
-} from "./ui/dialog"
-import { signIn, useSession } from "next-auth/react"
+import { Dialog, DialogContent, DialogTrigger } from "./ui/dialog"
+import { useSession, signOut } from "next-auth/react"
 import { Avatar, AvatarImage } from "./ui/avatar"
 import SignInDialog from "./sign-in-dialog"
 
 const SidebarSheet = () => {
   const { data } = useSession()
-
-  const handleLoginWithGoogle = async () => {
-    await signIn("google")
-  }
+  const handleSignout = () => signOut()
 
   return (
     <SheetContent className="min-h-screen overflow-y-auto">
@@ -29,9 +22,9 @@ const SidebarSheet = () => {
       </SheetHeader>
 
       <div className="flex items-center justify-between gap-3 border-b border-solid py-5">
-        {data && data?.user ? (
+        {data?.user ? (
           <div className="flex items-center gap-2 px-3">
-            <Avatar className="size-12">
+            <Avatar className="size-10">
               <AvatarImage src={data?.user?.image ?? ""}/>
             </Avatar>
 
@@ -42,7 +35,7 @@ const SidebarSheet = () => {
           </div>
         ) : (
           <>
-            <h2 className="font-bold">Olá, faça seu login!</h2>
+            <h2 className="px-3 font-bold">Olá, faça seu login!</h2>
             <Dialog>
               <DialogTrigger asChild>
                 <Button size="icon">
@@ -94,7 +87,11 @@ const SidebarSheet = () => {
       </div>
 
       <div className="mt-auto mb-2 flex flex-col gap-2">
-        <Button variant="ghost" className="justify-start gap-2">
+        <Button
+          variant="ghost"
+          className="justify-start gap-2"
+          onClick={handleSignout}
+        >
           <LogOutIcon size={18} />
           Sair da conta
         </Button>
