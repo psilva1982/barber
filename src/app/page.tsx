@@ -6,7 +6,7 @@ import { quickSearchOptions } from "@/_constants/search"
 import { db } from "@/_lib/prisma"
 import Image from "next/image"
 import Link from "next/link"
-import { SearchInput } from "@/components/Search"
+import { SearchInput } from "@/components/search"
 
 export default async function Home() {
   const barbershops = await db.barbershop.findMany({})
