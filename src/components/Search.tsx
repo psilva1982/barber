@@ -10,7 +10,9 @@ import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 
 const formSchema = z.object({
-  search: z.string().trim().min(1),
+  search: z.string().trim().min(1, {
+    message: "Digite algo para buscar",
+  }),
 })
 
 const SearchInput = () => {
