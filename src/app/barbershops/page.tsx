@@ -9,23 +9,30 @@ type Props = {
 
 const Barbershop = async ({ searchParams }: Props) => {
   const filters = await searchParams
-  const search = filters ? filters.search : ""
 
   const barbershops = await db.barbershop.findMany({
     where: {
       OR: [
-        {
-          name: {
-            contains: search,
-            mode: "insensitive",
-          },
-        },
-        {
-          address: {
-            contains: search,
-            mode: "insensitive",
-          },
-        },
+        filters?.search
+          ? {
+              name: {
+                contains: filters?.search,
+                mode: "insensitive",
+              },
+            }
+          : {},
+        filters?.service
+          ? {
+              services: {
+                some: {
+                  name: {
+                    contains: filters.service,
+                    mode: "insensitive",
+                  },
+                },
+              },
+            }
+          : {},
       ],
     },
   })
@@ -38,9 +45,9 @@ const Barbershop = async ({ searchParams }: Props) => {
         <SearchInput />
       </div>
 
-      <div className="px-4">
+      <div className="ps-2 pe-4 pb-4">
         <h2 className="mt-2 mb-3 text-xs font-bold text-gray-400 uppercase">
-          Resultados para {search}
+          Resultados para {filters?.search ?? filters?.service}
         </h2>
         <div className="grid grid-cols-2 gap-4">
           {barbershops.map((barbershop) => (
