@@ -45,9 +45,9 @@ const Barbershop = async ({ searchParams }: Props) => {
         <SearchInput />
       </div>
 
-      <div className="ps-2 pe-4 pb-4">
+      <div className="px-5 pb-3">
         <h2 className="mt-2 mb-3 text-xs font-bold text-gray-400 uppercase">
-          Resultados para {filters?.search ?? filters?.service}
+          Resultados para {filters?.search || filters?.service}
         </h2>
         <div className="grid grid-cols-2 gap-4">
           {barbershops.map((barbershop) => (
