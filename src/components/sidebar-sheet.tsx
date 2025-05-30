@@ -16,14 +16,14 @@ const SidebarSheet = () => {
   const handleSignout = () => signOut()
 
   return (
-    <SheetContent className="min-h-screen overflow-y-auto">
-      <SheetHeader>
-        <SheetTitle className="text-left">Menu</SheetTitle>
+    <SheetContent className="min-h-screen overflow-y-auto px-5">
+      <SheetHeader className="px-0">
+        <SheetTitle className="text-left font-semibold uppercase">Opções</SheetTitle>
       </SheetHeader>
 
-      <div className="flex items-center justify-between gap-3 border-b border-solid py-5">
+      <div className="flex items-center justify-between gap-3 border-b border-solid pb-5">
         {data?.user ? (
-          <div className="flex items-center gap-2 px-3">
+          <div className="flex items-center gap-2">
             <Avatar className="size-10">
               <AvatarImage src={data?.user?.image ?? ""}/>
             </Avatar>
@@ -35,7 +35,7 @@ const SidebarSheet = () => {
           </div>
         ) : (
           <>
-            <h2 className="px-3 font-bold">Olá, faça seu login!</h2>
+            <h2 className="font-bold">Olá, faça seu login!</h2>
             <Dialog>
               <DialogTrigger asChild>
                 <Button size="icon">
