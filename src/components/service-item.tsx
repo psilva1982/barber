@@ -7,17 +7,23 @@ import { Card, CardContent } from "./ui/card"
 import {
   Sheet,
   SheetContent,
+  SheetFooter,
   SheetHeader,
   SheetTitle,
   SheetTrigger,
 } from "./ui/sheet"
 import { Calendar } from "./ui/calendar"
 import { ptBR } from "date-fns/locale"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import BookingSummary from "./book-summary"
+import { createBooking } from "@/_actions/create-booking"
+import { useSession } from "next-auth/react"
+import { set } from "date-fns"
+import { toast } from "sonner"
+import { getBookings } from "@/_actions/get-bookings"
 
 type Props = {
-  barbershop: Barbershop
+  barbershop: Pick<Barbershop, "name">
   service: BarbershopService
 }
 
@@ -44,7 +50,6 @@ const TIME_LIST = [
   "17:30",
   "18:00",
 ]
-
 
 interface GetTimeListProps {
   bookings: Booking[]
@@ -74,17 +79,70 @@ const getTimeList = ({ bookings, selectedDay }: GetTimeListProps) => {
 }
 
 const ServiceItem = ({ service, barbershop }: Props) => {
-  const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined)
+  const { data } = useSession()
+  const [selectedDay, setSelectedDay] = useState<Date | undefined>(undefined)
   const [selectedTime, setSelectedTime] = useState<string | undefined>(
     undefined,
   )
+  const [dayBookings, setDayBookings] = useState<Booking[]>([])
+
+  useEffect(() => {
+    if (!selectedDay) return
+    const fetch = async () => {
+      console.log(selectedDay)
+      const bookings = await getBookings({
+        date: selectedDay,
+        serviceId: service.id,
+      })
+      setDayBookings(bookings)
+    }
+  }, [selectedDay, service.id])
+
+  console.log(dayBookings)
 
   const handleDateSelect = (date: Date | undefined) => {
-    setSelectedDate(date)
+    setSelectedDay(date)
+    setSelectedTime(undefined)
   }
 
   const handleTimeSelect = (time: string) => {
+    if (!selectedDay) return
+
     setSelectedTime(time)
+    const hour = Number(time.split(":")[0])
+    const minute = Number(time.split(":")[1])
+    const newDate = set(selectedDay, {
+      minutes: minute,
+      hours: hour,
+    })
+    setSelectedDay(newDate)
+  }
+
+  const handleCreateBooking = async () => {
+    if (!selectedDay || !selectedTime) return
+
+    try {
+      const hour = Number(selectedTime.split(":")[0])
+      const minute = Number(selectedTime.split(":")[1])
+      const newDate = set(selectedDay, {
+        minutes: minute,
+        hours: hour,
+      })
+
+      await createBooking({
+        serviceId: service.id,
+        userId: (data?.user as any).id,
+        date: newDate,
+      })
+      toast("Sucesso", {
+        description: "Reserva criada com sucesso!",
+      })
+    } catch (error) {
+      console.log(error)
+      toast("Erro", {
+        description: "Erro ao criar reserva!",
+      })
+    }
   }
 
   return (
@@ -124,7 +182,7 @@ const ServiceItem = ({ service, barbershop }: Props) => {
                   <Calendar
                     mode="single"
                     locale={ptBR}
-                    selected={selectedDate}
+                    selected={selectedDay}
                     onSelect={handleDateSelect}
                     fromDate={new Date()}
                     styles={{
@@ -153,10 +211,10 @@ const ServiceItem = ({ service, barbershop }: Props) => {
                   />
                 </div>
 
-                {selectedDate && (
+                {selectedDay && (
                   <div className="flex gap-3 overflow-x-auto border-b border-solid p-5 [&::-webkit-scrollbar]:hidden">
-                    {timeList.length > 0 ? (
-                      timeList.map((time) => (
+                    {TIME_LIST.length > 0 ? (
+                      TIME_LIST.map((time) => (
                         <Button
                           key={time}
                           variant={
@@ -176,14 +234,21 @@ const ServiceItem = ({ service, barbershop }: Props) => {
                   </div>
                 )}
 
-                {selectedDate && (
-                  <div className="p-5">
-                    <BookingSummary
-                      barbershop={barbershop}
-                      service={service}
-                      selectedDate={selectedDate}
-                    />
-                  </div>
+                {selectedDay && selectedTime && (
+                  <>
+                    <div className="p-5">
+                      <BookingSummary
+                        barbershop={barbershop}
+                        service={service}
+                        selectedDate={selectedDay}
+                      />
+                    </div>
+                    <SheetFooter className="px-5">
+                      <Button onClick={handleCreateBooking}>
+                        Confirmar reserva
+                      </Button>
+                    </SheetFooter>
+                  </>
                 )}
               </SheetContent>
             </Sheet>
