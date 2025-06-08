@@ -9,9 +9,12 @@ type GetBookingParams = {
 }
 
 export const getBookings = async ({ date }: GetBookingParams) => {
-  return await db.booking.findMany({
+  return db.booking.findMany({
     where: {
-      id: "0d586206-6cf0-4351-94fd-d26467aa4a4a",
+      date: {
+        lte: endOfDay(date),
+        gte: startOfDay(date)
+      }
     },
   })
 }
