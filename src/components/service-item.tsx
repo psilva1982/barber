@@ -20,6 +20,8 @@ import { useSession } from "next-auth/react"
 import { isPast, isToday, set } from "date-fns"
 import { toast } from "sonner"
 import { getBookings } from "@/_actions/get-bookings"
+import { Dialog, DialogContent } from "./ui/dialog"
+import SignInDialog from "./sign-in-dialog"
 
 type Props = {
   barbershop: Pick<Barbershop, "name">
@@ -79,6 +81,7 @@ const getTimeList = ({ bookings, selectedDay }: GetTimeListProps) => {
 
 const ServiceItem = ({ service, barbershop }: Props) => {
   const { data } = useSession()
+  const [signInDialogIsOpen, setSignInDialogIsOpen] = useState(false)
   const [selectedDay, setSelectedDay] = useState<Date | undefined>(undefined)
   const [selectedTime, setSelectedTime] = useState<string | undefined>(
     undefined,
@@ -97,6 +100,16 @@ const ServiceItem = ({ service, barbershop }: Props) => {
     }
     fetch()
   }, [selectedDay, service.id])
+
+  const handleBookingClick = () => {
+    if(data?.user) {
+      setBookingSheetIsOpen(true)
+      setSignInDialogIsOpen(false)
+    } else {
+      setSignInDialogIsOpen(true)
+    }
+
+  }
 
   const handleDateSelect = (date: Date | undefined) => {
     setSelectedDay(date)
@@ -153,6 +166,7 @@ const ServiceItem = ({ service, barbershop }: Props) => {
   }
 
   return (
+    <>
     <Card className="p-0">
       <CardContent className="flex items-center gap-3 p-3">
         <div className="relative h-[110px] max-h-[110px] w-[110px] max-w-[110px]">
@@ -176,7 +190,7 @@ const ServiceItem = ({ service, barbershop }: Props) => {
             </p>
 
             <Sheet open={bookingSheetIsOpen} onOpenChange={handleSheetOpenChange}>
-                <Button variant={"secondary"} size={"sm"} onClick={() => setBookingSheetIsOpen(true)}>
+                <Button variant={"secondary"} size={"sm"} onClick={() => handleBookingClick}>
                   Reservar
                 </Button>
               <SheetContent className="px-0">
@@ -261,6 +275,13 @@ const ServiceItem = ({ service, barbershop }: Props) => {
         </div>
       </CardContent>
     </Card>
+
+            <Dialog open={signInDialogIsOpen}>
+              <DialogContent className="w-[90%]">
+                <SignInDialog />
+              </DialogContent>
+            </Dialog>    
+    </>
   )
 }
 
