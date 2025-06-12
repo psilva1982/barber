@@ -18,14 +18,16 @@ const SidebarSheet = () => {
   return (
     <SheetContent className="min-h-screen overflow-y-auto px-5">
       <SheetHeader className="px-0">
-        <SheetTitle className="text-left font-semibold uppercase">Opções</SheetTitle>
+        <SheetTitle className="text-left font-semibold uppercase">
+          Opções
+        </SheetTitle>
       </SheetHeader>
 
       <div className="flex items-center justify-between gap-3 border-b border-solid pb-5">
         {data?.user ? (
           <div className="flex items-center gap-2">
             <Avatar className="size-10">
-              <AvatarImage src={data?.user?.image ?? ""}/>
+              <AvatarImage src={data?.user?.image ?? ""} />
             </Avatar>
 
             <div>
@@ -87,14 +89,16 @@ const SidebarSheet = () => {
       </div>
 
       <div className="mt-auto mb-2 flex flex-col gap-2">
-        <Button
-          variant="ghost"
-          className="justify-start gap-2"
-          onClick={handleSignout}
-        >
-          <LogOutIcon size={18} />
-          Sair da conta
-        </Button>
+        {data?.user && (
+          <Button
+            variant="ghost"
+            className="justify-start gap-2"
+            onClick={handleSignout}
+          >
+            <LogOutIcon size={18} />
+            Sair da conta
+          </Button>
+        )}
       </div>
     </SheetContent>
   )
