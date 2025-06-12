@@ -7,14 +7,38 @@ import { db } from "@/_lib/prisma"
 import Image from "next/image"
 import Link from "next/link"
 import { SearchInput } from "@/components/search"
+import { getServerSession } from "next-auth"
+import { authOptions } from "@/_lib/auth"
 
 export default async function Home() {
+  const session = await getServerSession(authOptions)
+
   const barbershops = await db.barbershop.findMany({})
   const popularBarbershops = await db.barbershop.findMany({
     orderBy: {
       name: "desc",
     },
   })
+
+  const bookings = session?.user
+    ? await db.booking.findMany({
+        where: {
+          userId: (session.user as any).id,
+          date: {
+            gte: new Date()
+          }
+        },
+        include: {
+          service: {
+            include: { barbershop: true },
+          },
+        },
+        orderBy: {
+          date: "asc"
+        }
+      })
+    : []
+
   return (
     <div>
       <Header />
@@ -56,7 +80,15 @@ export default async function Home() {
           />
         </div>
 
-        <BookingItem />
+        {/* Agendamentos */}
+        <div>
+          <h2 className="mb-3 mt-6 text-xs font-bold uppercase text-gray-400">Agendamentos</h2>
+          <div className="flex gap-3 overflow-x-auto [&::-webkit-scrollbar]:hidden">
+            {bookings.map((booking) => (
+              <BookingItem key={booking.id} booking={booking} />
+            ))}
+          </div>
+        </div>
 
         <h2 className="mt-6 mb-2 text-xs font-semibold text-gray-400 uppercase">
           Recomendados
