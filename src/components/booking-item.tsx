@@ -57,7 +57,7 @@ const BookingItem = ({ booking }: Props) => {
   return (
     <Sheet open={isSheetOpen} onOpenChange={handleSheetOpenChange}>
       <SheetTrigger className="w-full py-0">
-        <Card className="w-[90%] py-0">
+        <Card className="min-w-[90%] py-0">
           <CardContent className="flex justify-between p-0">
             <div className="flex flex-col items-start gap-2 py-5 pl-5">
               <Badge
